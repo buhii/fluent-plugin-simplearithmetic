@@ -1,29 +1,92 @@
-# Fluent::Plugin::Simplearithmetic
+fluent-plugin-simplearithmetic
+================================
+This fluentd output plugin helps you to calculate messages.
 
-TODO: Write a gem description
+This plugin is based on [fluent-plugin-datacalculator](https://github.com/muddydixon/fluent-plugin-datacalculator) written by Muddy Dixon.
 
-## Installation
+This plugin doesn't have a summarize function which provided by fluent-plugin-datacalculator.
 
-Add this line to your application's Gemfile:
 
-    gem 'fluent-plugin-simplearithmetic'
+## Installaion
 
-And then execute:
+```
+$ fluentd-gem fluent-plugin-simple-arithmetic
+```
 
-    $ bundle
+## Tutorial
 
-Or install it yourself as:
+Suppose you have a message like:
 
-    $ gem install fluent-plugin-simplearithmetic
+```
+{
+  'apple': 7,
+  'orange': 3,
+  'time_start': '2001-02-03T04:05:06Z',
+  'time_finish': '2001-02-03T04:06:12Z',
+}
+```
 
-## Usage
+Now you can calculate this `td-agent.conf`:
 
-TODO: Write usage instructions here
+```
+<match arithmetic.test>
+  type simple_arithmetic
+  tag calculated.test
+  undefined_variables nil
+  how_to_process_error error_string
 
-## Contributing
+  <formulas>
+    total_price   apple * 200 - orange * 100
 
-1. Fork it ( https://github.com/[my-github-username]/fluent-plugin-simplearithmetic/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+    # Calculation order is from up to down.
+    budget   2000 - total_price
+
+    # You can also use Time.iso8601
+    time_elapsed   Time.iso8601(time_finish) - Time.iso8601(time_start)
+  </formulas>
+</match>
+
+<match calculated.test>
+  type stdout
+</match>
+```
+
+Calculated result is:
+
+```
+{
+	"apple": 7,
+	"orange": 3,
+	"time_start": "2001-02-03T04:05:06Z",
+	"time_finish": "2001-02-03T04:06:12Z",
+	"total_price": 1100,
+	"budget": 900,
+	"time_elapsed": 66.0
+}
+```
+
+
+## Configuration
+#### undefined_variables
+1. `nil`
+
+2. `undefined`
+
+#### how_to_process_error
+1. `nil`
+
+
+2. `undefined`
+
+3. `error_string`
+
+
+### tag
+The tag prefix for emitted event messages. Default is `simple_arithmetic`.
+
+
+## Copyright
+
+Copyright:: Copyright (c) 2014- Takahiro Kamatani
+
+License:: Apache License, Version 2.0
