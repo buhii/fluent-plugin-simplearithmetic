@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-simplearithmetic"
-  spec.version       = "0.0.1"
+  spec.version       = "0.0.0.pre"
   spec.authors       = ["Takahiro Kamatani"]
   spec.email         = ["buhii314@gmail.com"]
   spec.summary       = %q{TODO: Fluent plugin to calculate messages.}

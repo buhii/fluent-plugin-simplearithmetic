@@ -10,7 +10,7 @@ This plugin doesn't have a summarize function which provided by fluent-plugin-da
 ## Installaion
 
 ```
-$ fluentd-gem fluent-plugin-simple-arithmetic
+$ fluentd-gem fluent-plugin-simplearithmetic
 ```
 
 ## Tutorial
@@ -51,7 +51,7 @@ Now you can calculate this `td-agent.conf`:
 </match>
 ```
 
-Calculated result is:
+Calculated result:
 
 ```
 {
@@ -67,12 +67,14 @@ Calculated result is:
 
 
 ## Configuration
-#### undefined_variables
+
+
+### undefined_variables
 1. `nil`
 
 2. `undefined`
 
-#### how_to_process_error
+### how_to_process_error
 1. `nil`
 
 
