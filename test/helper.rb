@@ -22,7 +22,7 @@ unless ENV.has_key?('VERBOSE')
   $log = nulllogger
 end
 
-require 'fluent/plugin/out_simplearithmetic'
+require 'fluent/plugin/out_simple_arithmetic'
 
 class Test::Unit::TestCase
 end
