@@ -3,7 +3,7 @@ module Fluent
   class SimpleArithmeticOutput < Output
     Fluent::Plugin.register_output('simple_arithmetic', self)
 
-    config_param :tag, :string, :default => "calculated"
+    config_param :tag, :string, :default => "simple_arithmetic"
 
     # 'nil', 'undefined'
     config_param :undefined_variables, :string, :default => 'undefined'

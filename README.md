@@ -8,7 +8,7 @@ This plugin is based on [fluent-plugin-datacalculator](https://github.com/muddyd
 ## Installaion
 
 ```
-$ fluentd-gem fluent-plugin-simplearithmetic
+$ fluent-gem install fluent-plugin-simplearithmetic
 ```
 
 ## Tutorial
