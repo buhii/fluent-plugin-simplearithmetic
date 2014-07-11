@@ -2,9 +2,7 @@ fluent-plugin-simplearithmetic
 ================================
 This fluentd output plugin helps you to calculate messages.
 
-This plugin is based on [fluent-plugin-datacalculator](https://github.com/muddydixon/fluent-plugin-datacalculator) written by Muddy Dixon.
-
-This plugin doesn't have a summarize function which provided by fluent-plugin-datacalculator.
+This plugin is based on [fluent-plugin-datacalculator](https://github.com/muddydixon/fluent-plugin-datacalculator) written by Muddy Dixon. This plugin doesn't have a summarize function which provided by fluent-plugin-datacalculator.
 
 
 ## Installaion
@@ -26,14 +24,12 @@ Suppose you have a message like:
 }
 ```
 
-Now you can calculate this `td-agent.conf`:
+Now you can calculate with this `td-agent.conf`:
 
 ```
 <match arithmetic.test>
   type simple_arithmetic
   tag calculated.test
-  undefined_variables nil
-  how_to_process_error error_string
 
   <formulas>
     total_price   apple * 200 - orange * 100
@@ -51,7 +47,7 @@ Now you can calculate this `td-agent.conf`:
 </match>
 ```
 
-Calculated result:
+Calculated results will be:
 
 ```
 {
@@ -72,15 +68,14 @@ Calculated result:
 ### undefined_variables
 1. `nil`
 
-2. `undefined`
+2. `undefined` (default)
 
 ### how_to_process_error
 1. `nil`
 
-
 2. `undefined`
 
-3. `error_string`
+3. `error_string` (default)
 
 
 ### tag
