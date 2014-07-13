@@ -11,6 +11,9 @@ module Fluent
     # 'nil', 'undefined', 'error_string'
     config_param :how_to_process_error, :string, :default => 'error_string'
 
+    config_param :replace_hyphen, :string, :default => '__HYPHON__'
+    config_param :replace_dollar, :string, :default => '__DOLLAR__'
+
     attr_accessor :_formulas
 
     def initialize
@@ -41,10 +44,9 @@ module Fluent
 
       # Create functions
       @_formulas = []
-
       def create_func(var, expr)
         begin
-          f_argv = expr.scan(/[a-zA-Z][\w\d\.]*/).uniq.select{|x| not x.start_with?('Time.iso8601')}
+          f_argv = expr.scan(/[a-zA-Z\_][\w\d\.\_]*/).uniq.select{|x| not x.start_with?('Time.iso8601')}
           f = eval('lambda {|' + f_argv.join(',') + '| ' + expr + '}')
           return [f, f_argv]
         rescue SyntaxError
@@ -61,6 +63,10 @@ module Fluent
           @_formulas.push [var, f_argv, formula]
         }
       }
+      if @_formulas.empty?
+        raise Fluent::ConfigError, "No formulas found"
+      end
+
     end
 
     def has_all_keys?(record, argv)
@@ -80,7 +86,30 @@ module Fluent
       return formula.call(*argv)
     end
 
+    # functions for symbols
+    def replace_symbols(record)
+      # 'var-1' -> 'var__HYPHEN__1'
+      new_record = {}
+      record.each_pair {|key, value|
+        new_key = key.gsub('-', @replace_hyphen).gsub('$', @replace_dollar)
+        new_record[new_key] = value
+      }
+      return new_record
+    end
+
+    def restore_symbols(record)
+      # 'var__HYPHEN__1' -> 'var-1'
+      new_record = {}
+      record.each_pair {|key, value|
+        new_key = key.gsub(@replace_hyphen, '-').gsub(@replace_dollar, '$')
+        new_record[new_key] = value
+      }
+      new_record
+    end
+
     def calculate(record)
+      record = replace_symbols(record)
+
       @_formulas.each {|var, f_argv, formula|
         if not has_all_keys?(record, f_argv)
           if @undefined_variables == 'nil'
@@ -100,7 +129,8 @@ module Fluent
           end
         end
       }
-      record
+
+      restore_symbols(record)
     end
 
     def emit(tag, es, chain)
