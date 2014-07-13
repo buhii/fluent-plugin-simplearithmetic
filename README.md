@@ -5,7 +5,7 @@ This fluentd output plugin helps you to calculate messages.
 This plugin is based on [fluent-plugin-datacalculator](https://github.com/muddydixon/fluent-plugin-datacalculator) written by Muddy Dixon. This plugin doesn't have a summarize function which provided by fluent-plugin-datacalculator.
 
 
-## Installaion
+## Installation
 
 ```
 $ fluent-gem install fluent-plugin-simplearithmetic
