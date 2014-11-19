@@ -50,19 +50,21 @@ class SimpleArithmeticOutputTest < Test::Unit::TestCase
     d1 = create_driver %[
       replace_hyphen  __H__
       replace_dollar  __D__
+      replace_at      __AT__
       <formulas>
-        var__H__1  __H__2 * var__D__3
-        __D__3  __D__1 + __D__2
+        var__H__1        __H__2 * var__D__3
+        __D__3           __D__1 + __D__2
+        __AT__timestamp  var__AT__
       </formulas>
     ]
     assert_equal '__H__', d1.instance.replace_hyphen
     assert_equal '__D__', d1.instance.replace_dollar
     d1.run do
       time = Time.parse("2011-01-02 13:14:15 UTC").to_i
-      d1.emit({'-2'=>10, 'var$3'=>20}, time)
+      d1.emit({'-2'=>10, 'var$3'=>20, 'var@'=>'__at'}, time)
       d1.emit({'$1'=>10, '$2'=>20}, time)
     end
-    assert_equal d1.emits[0][2], {"-2"=>10, "var$3"=>20, "var-1"=>200}
+    assert_equal d1.emits[0][2], {"-2"=>10, "var$3"=>20, "var-1"=>200, "var@"=>"__at", "@timestamp"=>"__at"}
     assert_equal d1.emits[1][2], {"$1"=>10, "$2"=>20, "$3"=>30}
   end
 

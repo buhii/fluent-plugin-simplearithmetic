@@ -120,22 +120,25 @@ All formulas will be evaluated as ruby sentences. Some json fields will not be f
 
 ```
 <formulas>
-   var-1   a + b
-   var$2   c * d
+   var-1  a + b
+   var$2  c * d
+   var@   "@@@"
 </formulas>
 ```
 
 will raise an syntax error in the initialize process of fluentd.
 
-To get rid of this case, you can set `replace_hyphen` and `replace_dollar` in the configuration and formulas.
+To get rid of this case, you can set `replace_hyphen`, `replace_at` and `replace_dollar` in the configuration and formulas.
 
 ```
 replace_hyphen   __H__
 replace_dollar   __D__
+replace_at       __AT__
 
 <formulas>
-   var__H__1   a + b
-   var__D__2   c * d
+   var__H__1  a + b
+   var__D__2  c * d
+   var__AT__  "@@@"
 </formulas>
 ```
 

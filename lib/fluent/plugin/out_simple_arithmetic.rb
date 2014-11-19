@@ -13,6 +13,7 @@ module Fluent
 
     config_param :replace_hyphen, :string, :default => '__HYPHON__'
     config_param :replace_dollar, :string, :default => '__DOLLAR__'
+    config_param :replace_at,     :string, :default => '__AT__'
 
     attr_accessor :_formulas
 
@@ -91,7 +92,7 @@ module Fluent
       # 'var-1' -> 'var__HYPHEN__1'
       new_record = {}
       record.each_pair {|key, value|
-        new_key = key.gsub('-', @replace_hyphen).gsub('$', @replace_dollar)
+        new_key = key.gsub('-', @replace_hyphen).gsub('$', @replace_dollar).gsub('@', @replace_at)
         new_record[new_key] = value
       }
       return new_record
@@ -101,7 +102,7 @@ module Fluent
       # 'var__HYPHEN__1' -> 'var-1'
       new_record = {}
       record.each_pair {|key, value|
-        new_key = key.gsub(@replace_hyphen, '-').gsub(@replace_dollar, '$')
+        new_key = key.gsub(@replace_hyphen, '-').gsub(@replace_dollar, '$').gsub(@replace_at, '@')
         new_record[new_key] = value
       }
       new_record
