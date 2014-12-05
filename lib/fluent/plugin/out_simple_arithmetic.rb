@@ -47,7 +47,7 @@ module Fluent
       @_formulas = []
       def create_func(var, expr)
         begin
-          f_argv = expr.scan(/[a-zA-Z\_][\w\d\.\_]*/).uniq.select{|x| not x.start_with?('Time.iso8601')}
+          f_argv = expr.scan(/[a-zA-Z\_][\w\d\.\_]*/).uniq.select{|x| not x.start_with?('iso8601', 'Time.iso8601')}
           f = eval('lambda {|' + f_argv.join(',') + '| ' + expr + '}')
           return [f, f_argv]
         rescue SyntaxError
